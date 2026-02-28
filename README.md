@@ -36,18 +36,42 @@ Stack: Kotlin + Ktor + jOOQ (SQL-first) + Flyway migrations + Oracle.
 
 ### Prereqs
 
-- Java 8+ (project targets Java 8 for compatibility)
-- Gradle (recommended) or import as a Gradle project in IntelliJ
+- Java 17+
+- Gradle (optional; wrapper included) or import as a Gradle project in IntelliJ
 - Oracle DB (local XE is fine for development)
 
 ### Run locally
 
 From `backend/`:
 
+- Using the included Gradle wrapper (recommended):
+	- Windows (PowerShell): `./gradlew.bat :app:run`
+	- macOS/Linux: `./gradlew :app:run`
 - If you have Gradle installed: `gradle :app:run`
-- If you add a Gradle wrapper later: `./gradlew :app:run`
+
+Copy/paste (Windows PowerShell):
+
+```powershell
+cd backend
+.\gradlew.bat :app:run
+```
+
+From the repo root, you can also run:
+
+- Windows (PowerShell): `./gradlew.bat :app:run`
+- macOS/Linux: `./gradlew :app:run`
+
+Health check (Windows PowerShell):
+
+```powershell
+Invoke-RestMethod http://localhost:8080/api/v1/health
+```
 
 Config is in `backend/app/src/main/resources/application.conf`.
+
+If you don’t have Oracle running yet, you can start the API without DB by setting:
+
+- `db.enabled = false`
 
 Env:
 

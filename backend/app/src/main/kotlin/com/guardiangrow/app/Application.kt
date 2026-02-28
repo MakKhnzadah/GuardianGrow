@@ -2,9 +2,15 @@ package com.guardiangrow.app
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.guardiangrow.app.db.installDatabase
 import com.guardiangrow.app.http.problemDetails
 import com.guardiangrow.app.routes.authRoutes
+import com.guardiangrow.app.routes.childrenRoutes
+import com.guardiangrow.app.routes.contentRoutes
 import com.guardiangrow.app.routes.healthRoutes
+import com.guardiangrow.app.routes.plansRoutes
+import com.guardiangrow.app.routes.sessionsRoutes
+import com.guardiangrow.app.routes.reportsRoutes
 import com.guardiangrow.data.DbConfig
 import com.guardiangrow.data.Database
 import io.ktor.http.*
@@ -71,6 +77,7 @@ fun Application.module() {
   if (dbEnabled) {
     val dbConfig = DbConfig.fromConfig(appConfig)
     val database = Database(dbConfig)
+    installDatabase(database)
     environment.monitor.subscribe(ApplicationStopping) {
       database.close()
     }
@@ -120,6 +127,12 @@ fun Application.module() {
           val role = principal.payload.getClaim("role").asString()
           call.respond(mapOf("userId" to userId, "role" to role))
         }
+
+        childrenRoutes()
+        contentRoutes()
+        plansRoutes()
+        sessionsRoutes()
+        reportsRoutes()
       }
     }
   }
